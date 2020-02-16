@@ -31,7 +31,7 @@ public class FileRepositoryImpl implements FileRepository {
         int symbol = br.read();
         while (symbol != -1) {
             if ((char) symbol == '\r') {
-                symbol = addLineAndReadyToReadNextLine(br, fileLines, line);
+                symbol = addLineAndGetFirstSymbolFromNextLine(br, fileLines, line);
                 if ((char) symbol == '\r') {
                     continue;
                 }
@@ -45,7 +45,7 @@ public class FileRepositoryImpl implements FileRepository {
         return fileLines;
     }
 
-    private int addLineAndReadyToReadNextLine(BufferedReader br, List<String> fileLines, StringBuilder line) throws IOException {
+    private int addLineAndGetFirstSymbolFromNextLine(BufferedReader br, List<String> fileLines, StringBuilder line) throws IOException {
         int symbol;
         br.read();
         symbol = br.read();

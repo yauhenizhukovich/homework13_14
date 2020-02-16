@@ -17,22 +17,12 @@ public class NumberServiceImpl implements NumberService {
         if (numbers.equals("")) {
             return 0;
         }
-        Pattern separatorPattern = Pattern.compile(NUMBER_SEPARATION_REGEXP);
-        Matcher separatorMatcher = separatorPattern.matcher(numbers);
-        int countOfSeparators = 0;
-        while (separatorMatcher.find()) {
-            countOfSeparators++;
-        }
-        if (countOfSeparators > MAX_SEPARATORS_IN_LINE) {
-            throw new NumberValidityException("Too much arguments in one of the lines!");
-        }
+        checkIfArgumentsCountValid(numbers);
         String[] localNumbers = numbers.split(NUMBER_SEPARATION_REGEXP);
         Pattern pattern = Pattern.compile(UNRESOLVED_CHARACTERS_IN_NUMBERS_REGEXP);
         int sum = 0;
         for (String numberString : localNumbers) {
-            if (numberString.equals("")) {
-                throw new NumberValidityException("Empty argument can only be confirmed if the entire string is empty!");
-            }
+            checkIfEmptyArgument(numberString);
             Matcher matcher = pattern.matcher(numberString);
             if (matcher.find()) {
                 throw new NumberValidityException("Strings should contain only digits!");
@@ -42,6 +32,24 @@ public class NumberServiceImpl implements NumberService {
             }
         }
         return sum;
+    }
+
+    private void checkIfEmptyArgument(String numberString) throws NumberValidityException {
+        if (numberString.equals("")) {
+            throw new NumberValidityException("Empty argument can only be confirmed if the entire string is empty!");
+        }
+    }
+
+    private void checkIfArgumentsCountValid(String numbers) throws NumberValidityException {
+        Pattern separatorPattern = Pattern.compile(NUMBER_SEPARATION_REGEXP);
+        Matcher separatorMatcher = separatorPattern.matcher(numbers);
+        int countOfSeparators = 0;
+        while (separatorMatcher.find()) {
+            countOfSeparators++;
+        }
+        if (countOfSeparators > MAX_SEPARATORS_IN_LINE) {
+            throw new NumberValidityException("Too much arguments in one of the lines!");
+        }
     }
 
 }
